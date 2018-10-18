@@ -1,0 +1,16 @@
+package com.service.remote.services;
+
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+
+@Service
+public class RemoteService {
+
+	@Async("asyncExecutor")
+	public String getResponseAfter10Seconds(String name) {
+		
+		
+		return name;
+	}
+	
+}

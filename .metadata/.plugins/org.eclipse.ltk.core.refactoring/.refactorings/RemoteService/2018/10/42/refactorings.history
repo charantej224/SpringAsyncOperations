@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Move element &apos;RemoteService.java&apos; to &apos;RemoteService/src/main/java/com.service.remote.services&apos;&#x0A;- Original project: &apos;RemoteService&apos;&#x0A;- Destination element: &apos;RemoteService/src/main/java/com.service.remote.services&apos;&#x0A;- Original element: &apos;RemoteService.java&apos;&#x0A;- Update references to refactored element" description="Move compilation unit" destination="/src\/main\/java&lt;com.service.remote.services" element1="/src\/main\/java&lt;{RemoteService.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.move" policy="org.eclipse.jdt.ui.moveResources" qualified="false" references="true" stamp="1539765360026" units="1" version="1.0"/>
+</session>

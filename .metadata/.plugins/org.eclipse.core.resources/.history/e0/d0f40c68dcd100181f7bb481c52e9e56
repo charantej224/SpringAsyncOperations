@@ -1,0 +1,47 @@
+package com.service.remote.controller;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.databind.util.JSONPObject;
+import com.service.remote.model.UserModel;
+
+@RestController
+public class RemoteServiceController {
+
+	
+	@GetMapping("/tenSecondsDelay")
+	public UserModel getTenSecondsDelay() throws InterruptedException {
+		Thread.sleep(10 * 1000);
+		UserModel user =  new UserModel();
+		user.setUserName("Something");
+		user.setDelayTime("10");
+		return user;
+	}
+	
+	@GetMapping("/twentySecondsDelay")
+	public UserModel getTwentySecondsDelay() throws InterruptedException {
+		Thread.sleep(20 * 1000);
+		UserModel user =  new UserModel();
+		user.setUserName("Something");
+		user.setDelayTime("20");
+		return user;
+	}
+	
+	@GetMapping("/hashMapJson")
+	public JSONPObject getHashMap() {
+		
+		Map<String,String> value = new HashMap<>();
+		value.put("Charan", "Charan");
+		value.put("Charan2", "Charan");
+		
+		return new JSONPObject(value);
+		
+		
+	}
+	
+	
+}

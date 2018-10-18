@@ -1,0 +1,6 @@
+package com.service.remote;
+
+
+public class ApplicationConfiguration {
+
+}

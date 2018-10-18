@@ -1,0 +1,15 @@
+package com.service.remote.services;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class RemoteService {
+
+	
+	public String getResponseAfter10Seconds(String name) {
+		
+		
+		return name;
+	}
+	
+}

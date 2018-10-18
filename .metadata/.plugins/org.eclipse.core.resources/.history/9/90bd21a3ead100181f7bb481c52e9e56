@@ -1,0 +1,16 @@
+package com.service.remote.services;
+
+import java.util.concurrent.CompletableFuture;
+
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+
+@Service
+public class RemoteService {
+
+	@Async("asyncExecutor")
+	public CompletableFuture<String> getResponseAfter10Seconds(String name) throws InterruptedException {
+		Thread.sleep(10 * 1000);
+		return CompletableFuture.completedFuture(name);
+	}	
+}

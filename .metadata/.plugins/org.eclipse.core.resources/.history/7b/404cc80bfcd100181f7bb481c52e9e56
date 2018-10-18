@@ -1,0 +1,47 @@
+package com.service.remote.services;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+
+@Service
+public class RemoteService {
+	
+	Logger logger = LoggerFactory.getLogger(RemoteService.class);
+
+	@Async("asyncExecutor")
+	public CompletableFuture<String> getResponseAfter10Seconds(String name) throws InterruptedException {
+		logger.debug("Into Service Method : " + Thread.currentThread().getName() +  " - String Value - " + name );
+		
+		Thread.sleep(10 * 1000);
+		return CompletableFuture.completedFuture(name);
+	}	
+	
+	
+	public String orchestrateResponse() throws InterruptedException, ExecutionException {
+		
+		Long startTime = System.currentTimeMillis();
+
+		CompletableFuture<String>[] futureArray = new CompletableFuture[3];
+
+		for (int i = 0; i <= 2; i++) {
+			CompletableFuture<String> value = getResponseAfter10Seconds(String.valueOf(i));
+			futureArray[i] = value;
+		}
+		CompletableFuture.allOf(futureArray).join();
+		// Wait until they are all done
+
+		for (CompletableFuture completableFuture : futureArray) {
+			logger.info("Value --> " + completableFuture.get());
+		}
+		
+		logger.debug("time invovled" + String.valueOf(System.currentTimeMillis() - startTime));
+		
+		return "success";
+		
+	}
+}

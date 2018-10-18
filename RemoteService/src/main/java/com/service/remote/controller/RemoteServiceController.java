@@ -1,0 +1,98 @@
+package com.service.remote.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.service.remote.model.UserModel;
+import com.service.remote.model.UserModelList;
+import com.service.remote.services.RemoteService;
+
+@RestController
+public class RemoteServiceController {
+
+	private static Logger logger = LoggerFactory.getLogger(RemoteServiceController.class);
+
+	@Autowired
+	RemoteService service;
+
+	@GetMapping("/tenSecondsDelay")
+	public UserModel getTenSecondsDelay() throws InterruptedException {
+		Thread.sleep(10 * 1000);
+		UserModel user = new UserModel();
+		user.setUserName("Something");
+		user.setDelayTime("10");
+		return user;
+	}
+
+	@GetMapping("/twentySecondsDelay")
+	public UserModel getTwentySecondsDelay() throws InterruptedException {
+		Thread.sleep(20 * 1000);
+		UserModel user = new UserModel();
+		user.setUserName("Something");
+		user.setDelayTime("20");
+		return user;
+	}
+
+	@GetMapping("/hashMapJson")
+	public List<?> getHashMap() throws Exception {
+
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		UserModel user = new UserModel();
+		user.setUserName("Something");
+		user.setDelayTime("20");
+
+		UserModel user1 = new UserModel();
+		user1.setUserName("Something");
+		user1.setDelayTime("20");
+
+		UserModelList model1 = new UserModelList();
+		model1.setUser(objectMapper.writeValueAsString(user));
+		model1.setName(user.getUserName());
+		UserModelList model2 = new UserModelList();
+		model2.setUser(objectMapper.writeValueAsString(user1));
+		model2.setName(user1.getUserName());
+
+		List<UserModelList> userList = new ArrayList<>();
+		userList.add(model1);
+		userList.add(model2);
+
+		return userList;
+
+	}
+
+	@GetMapping("async/request")
+	public String getReturnAsync() throws InterruptedException, ExecutionException {
+		
+		Long startTime = System.currentTimeMillis();
+
+		CompletableFuture<String>[] futureArray = new CompletableFuture[3];
+
+		for (int i = 0; i <= 2; i++) {
+			CompletableFuture<String> value = service.getResponseAfter10Seconds(String.valueOf(i));
+			futureArray[i] = value;
+		}
+		CompletableFuture.allOf(futureArray).join();
+		// Wait until they are all done
+
+		for (CompletableFuture completableFuture : futureArray) {
+			logger.info("Value --> " + completableFuture.get());
+		}
+
+		logger.debug("time invovled" + String.valueOf(System.currentTimeMillis() - startTime));
+
+		return "success";
+
+		
+
+	}
+}
